@@ -41,7 +41,7 @@ class Download < ActiveRecord::Base
   # t.integer "received_bytes",                :null => false
   # t.integer "total_bytes",                   :null => false
   # t.integer "state",                         :null => false
-  
+
   timestamp_accessors :start_time
 end
 
@@ -121,7 +121,7 @@ class ChromeSpy
     end
 
     def recent_downloads
-      Download.limit(5).all.each { |d| puts "bytes: #{d.total_bytes} path: #{d.full_path}" }
+      Download.order('start_time DESC').limit(5).all.each { |d| puts "bytes: #{d.total_bytes} path: #{d.full_path}" }
       nil
     end
   end

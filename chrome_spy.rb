@@ -5,9 +5,14 @@ require 'rubygems'
 require 'sqlite3'
 require 'active_record'
 
+# copies the sqlite3 database, to enable access even when locked by Google Chrome
+db = File.expand_path("~/Library/Application Support/Google/Chrome/Default/History")
+newdb = "/tmp/chrome.sqlite"
+`cp "#{db}" "#{newdb}"`
+
 ActiveRecord::Base.establish_connection({
   :adapter => "sqlite3",
-  :database => File.expand_path("~/Library/Application Support/Google/Chrome/Default/History")
+  :database => newdb
 })
 
 # If you'd like to see the entire schema...
@@ -41,7 +46,7 @@ class Download < ActiveRecord::Base
   # t.integer "received_bytes",                :null => false
   # t.integer "total_bytes",                   :null => false
   # t.integer "state",                         :null => false
-  
+
   timestamp_accessors :start_time
 end
 

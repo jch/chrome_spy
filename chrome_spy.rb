@@ -18,12 +18,12 @@ module TimestampAccessors
     attributes.each do |attr|
       name = attr.to_s
 
-      # Some timestamps have 17 digits
-      # Since 10000000000 is year 2286, so I'm assuming that no dates are longer
-      # than 10 digits
+      # use method from http://linuxsleuthing.blogspot.nl/2011/06/decoding-google-chrome-timestamps-in.html
+      # to fix time stamps
       define_method(name) {
-        raw = read_attribute(name).to_s.slice(0, 10)
-        Time.at(raw.to_i)
+        raw = read_attribute(name).to_s
+        epoch = (raw.to_i / 1000000) -11644473600
+        Time.at(epoch)
       }
 
       define_method(name+'=') { |t|
@@ -41,7 +41,7 @@ class Download < ActiveRecord::Base
   # t.integer "received_bytes",                :null => false
   # t.integer "total_bytes",                   :null => false
   # t.integer "state",                         :null => false
-  
+
   timestamp_accessors :start_time
 end
 

@@ -51,7 +51,7 @@ class KeywordSearchTerm < ActiveRecord::Base
   # t.integer "url_id",                    :null => false
   # t.string  "lower_term", :limit => nil, :null => false
   # t.string  "term",       :limit => nil, :null => false
-  set_primary_key :keyword_id
+  self.primary_key = :keyword_id
   belongs_to :url
 end
 
@@ -68,7 +68,7 @@ class SegmentUsage < ActiveRecord::Base
   # t.integer "segment_id",                 :null => false
   # t.integer "time_slot",                  :null => false
   # t.integer "visit_count", :default => 0, :null => false
-  set_table_name "segment_usage"
+  self.table_name = "segment_usage"
   belongs_to :segment
   timestamp_accessors :time_slot
 end
@@ -86,7 +86,7 @@ class Url < ActiveRecord::Base
 end
 
 class VisitSource < ActiveRecord::Base
-  set_table_name "visit_source"
+  self.table_name = "visit_source"
   # t.integer "source", :null => false
 end
 
@@ -121,7 +121,7 @@ class ChromeSpy
     end
 
     def recent_downloads
-      Download.limit(5).all.each { |d| puts "bytes: #{d.total_bytes} path: #{d.full_path}" }
+      Download.order('start_time DESC').limit(5).all.each { |d| puts "bytes: #{d.total_bytes} path: #{d.full_path}" }
       nil
     end
   end
